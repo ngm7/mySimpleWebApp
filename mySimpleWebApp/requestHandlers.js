@@ -1,4 +1,5 @@
-var exec = require("child_process").exec;
+var querystring = require("querystring"),
+    fs = require("fs");
 
 function start(response){
   console.log("The Start request handler was called. ");
@@ -9,12 +10,12 @@ function start(response){
               '</head>'+ 
               '<body>'+ 
               '<form action="/upload" method="post">'+ 
-              '<textarea name="text" rows="20" cols="60"></textarea>'+ 
+              '<textarea name="text" rows="1" cols="60"></textarea>'+ 
               '<input type="submit" value="Submit text" />'+ 
               '</form>'+ 
               '</body>'+ 
               '</html>'; 
-    response.writeHead(200, {"Content-type" : "plain/text"});
+    response.writeHead(200, {"Content-Type" : "text/html"});
     response.write(body);
     response.end();
   
@@ -22,10 +23,19 @@ function start(response){
 
 function upload(response, postData){
   console.log("The Upload request handler was called. ");
-  response.writeHead(200, {"Content-type" : "plain/text"});
-  response.write("You entered : " + postData);
+  response.writeHead(200, {"Content-Type" : "text/plain"});
+  response.write("You entered : " + querystring.parse(postData).text);
   response.end();
 }
 
+function show(response){
+  console.log("Request Handler 'show' was called")
+  response.writeHead(200, {"Content-Type" : "image/jpg"});
+  fs.createReadStream("/home/ngm/nodejs/mySimpleWebApp/housewives.jpg").pipe(response);
+}
+
+
 exports.start = start;
 exports.upload = upload;
+exports.show = show;
+
