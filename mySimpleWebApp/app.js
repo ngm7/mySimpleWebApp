@@ -1,11 +1,14 @@
-var server = require('./server');
-var router = require('./router');
-var requestHandlers = require('./requestHandlers');
+var express = require('express');
+var app = express();
 
-var handle = {};
-handle["/"] = requestHandlers.start;
-handle["/start"] = requestHandlers.start;
-handle["/upload"] = requestHandlers.upload;
-handle["/show"] = requestHandlers.show;
+app.get('/', function (req, res) {
+  res.send('Hello World!');
+});
 
-server.start(router.route, handle);
+var server = app.listen(3000, function () {
+  var host = server.address().address;
+  var port = server.address().port;
+
+  console.log('Example app listening at http://%s:%s', host, port);
+});
+
